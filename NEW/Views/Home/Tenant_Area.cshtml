@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewBag.Title = "Tenant_Area";
+    ViewBag.userMail = "revi@gmail.com";
+}
+
+@{ 
+    var username = "Tenant Name";
+    var admin = true;
+}
+
+<style>
+    .btn {
+        margin-top: 3%;
+        width: 50%;
+        max-width: 300px;
+    }
+
+    #openDoor {
+        width: 140px;
+        height: 140px;
+        line-height: 50px;
+        border-radius: 50%;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 140%;
+        cursor: pointer;
+    }
+</style>
+
+ @{ if (ViewBag.userMail == "revi@gmail.com")
+     {
+    <div align="center">
+
+        <br />
+        <h4>Hello @username,&emsp;what would you like to do?</h4>
+
+        <button type="button" class="btn btn-success btn-lg">Change detials</button>
+        <div>
+            <button id="openDoor" type="button" class="btn btn-warning">Open door</button>
+        </div>
+
+        @if (admin)
+        {
+                <button type="button" class="btn btn-outline-danger">Admin area</button>
+        }
+
+    </div>
+     }
+     else
+     { <p> User Mail is invalid!</p>
+     }
+     }

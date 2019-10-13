@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+
+<script>
+    
+        Notification.requestPermission().then(function (result) {
+            console.log(result);
+        });
+    
+</script>
+
+<style>
+    .btn {
+        width: 130px;
+        font-size: 140%;
+        margin-top: 2%;
+    }
+
+    #msg {
+        width: 70%;
+        max-width: 400px;
+        margin-top: 3%;
+        text-align: left
+    }
+
+    .form-group {
+        margin-top: 3%;
+    }
+</style>
+
+
+<div align="center">
+    <div id="msg" class="card border-success mb-3">
+        <h4 class="card-header">Login</h4>
+        <div class="card-body">
+
+            <form>
+                <fieldset>
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Password">
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your password with anyone else.</small>
+                    </div>
+
+                    <div align="right">
+                        <button type="submit" class="btn btn-primary btn-lg" onsubmit="onclick()">Submit</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function onclick()
+    {
+        location.href('@Url.Action("Home","Tenant_Area")');
+    }
+</script>

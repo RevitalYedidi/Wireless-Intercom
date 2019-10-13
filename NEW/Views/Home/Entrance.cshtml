@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = "Entrance";
+}
+
+<style>
+
+
+    .table-secondary {
+        table-layout: fixed;
+        width: 300px;
+        height: 350px;
+        max-height: 1000px;
+        max-width: 1000px;
+        text-align: center;
+        padding: 8px;
+        margin-top: 3%;
+    }
+
+
+        .table-secondary > th,
+        .table-secondary > td {
+            /*height: 90px;
+            width: 70px;
+            text-align: center;
+            font-size: 40px;*/
+            width: 33%;
+            height: 25%;
+            max-width: 100px;
+            max-height: 90px;
+            font-size: 170%;
+        }
+
+    #btn {
+        width: 100px;
+        margin: auto;
+        margin-top: 3%;
+        display: block;
+    }
+
+    #code {
+        width: 250px;
+        height: 55px;
+        table-layout: fixed;
+        text-align: center;
+        padding: 8px;
+        font-size: 250%;
+        margin: auto;
+        margin-top: 3%;
+    }
+
+</style>
+
+
+<div id="code" class="alert alert-dismissible alert-success" align="center">
+    <strong> *&emsp;*&emsp;*&emsp;* </strong>
+</div>
+    
+    <table class="table-secondary" border="1" align="center">
+        <tr class="table-secondary">
+            <td id="1">1</td>
+            <td id="2">2</td>
+            <td id="3">3</td>
+        </tr>
+        <tr class="table-secondary">
+            <td id="4">4</td>
+            <td id="5">5</td>
+            <td id="6">6</td>
+        </tr>
+        <tr class="table-secondary">
+            <td id="7">7</td>
+            <td id="8">8</td>
+            <td id="9">9</td>
+        </tr>
+        <tr class="table-secondary">
+            <td id="*">*</td>
+            <td id="0">0</td>
+            <td id="#">#</td>
+        </tr>
+    </table>
+
+    <button id="btn" type="button" class="btn btn-primary" onclick="alert('hello');">
+        Geust ?
+    </button>
+
+
+
