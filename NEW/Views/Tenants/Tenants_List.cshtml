@@ -4,105 +4,106 @@
     ViewBag.Title = "Tenants_List";
 }
 
+<div id="divContent">
+    <h1 style="margin-top:3%;">Adress of the building</h1>
+    <h2>Tenants:</h2>
 
-<h1 style="margin-top:3%;">Adress of the building</h1>
-<h2>Tenants:</h2>
 
+    @*@{
 
-@*@{
+            List<string> _list = new List<string> { "noamaaaaaaaaa", "hila", "ido", "moriya" };
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                dropdownnn
+            </a>
+            <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
 
-        List<string> _list = new List<string> { "noamaaaaaaaaa", "hila", "ido", "moriya" };
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-            dropdownnn
-        </a>
-        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-
-            @Html.DropDownListFor(item => _list, new SelectList(_list))
-        </div>
-        //new SelectListItem(new List<int>{ 1, 2, 3 },)
-
-    }*@
-
-<button type="button" class="btn btn-primary" data-target="#sendmsg" data-toggle="modal">Send Message To Tenant</button>
-<button type="button" style="float: right;" class="btn btn-danger" onclick="history.go(-1);">Back</button>
-<br />
-
-@* popup msg *@
-<div class="modal" id="sendmsg">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            @*title*@
-            <div class="modal-header">
-                <h5 id="massegeToTenant" class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                @Html.DropDownListFor(item => _list, new SelectList(_list))
             </div>
-            @*body of popup*@
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="exampleTextarea">Write your message here</label>
-                    <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
-                    @*take photo*@
+            //new SelectListItem(new List<int>{ 1, 2, 3 },)
+
+        }*@
+
+    @*<button type="button" class="btn btn-primary" data-target="#sendmsg" data-toggle="modal">Send Message To Tenant</button>*@
+    <button type="button" style="float: right;" class="btn btn-danger" onclick="history.go(-1);">Back</button>
+    <br />
+
+    @* popup msg *@
+    <div class="modal" id="sendmsg">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @*title*@
+                <div class="modal-header">
+                    <h5 id="massegeToTenant" class="modal-title"></h5>
+                    <button onclick="hideModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @*body of popup*@
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="exampleTextarea">Write your message here</label>
+                        <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+                        @*take photo*@
+                    </div>
+
+                </div>
+                @* buttons *@
+                <div class="modal-footer">
+                    <button style="width:100px;" type="submit" class="btn btn-primary" onclick="notifyMe()">Send</button>
+                    @*add popup wait to answer*@
+                    <button onclick="hideModal()" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </div>
 
             </div>
-            @* buttons *@
-            <div class="modal-footer">
-                <button style="width:100px;" type="submit" class="btn btn-primary" onclick="notifyMe()">Send</button>
-                @*add popup wait to answer*@
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            </div>
-
         </div>
     </div>
-</div>
 
-<br />
+    <br />
 
-@{
-    var i = 0;
-}
-<fieldset>
-    <table class="table table-hover">
-        @*מספר הדירות מהדאטה בייס*@
-        @{
-            var apartmentNum = Model.GroupBy(t => t.ApartmentNumber).Count();
-        }
-        @for(int j=1; j<=apartmentNum; j++){
-
-            var tenant = Model.Where(a => a.ApartmentNumber == j).ToList()[0];
-            {
-                <tr>
-                    <td> @tenant.ApartmentNumber</td>
-                    <td>
-                        @{
-                            var apartmentList = Model.Where(t => t.ApartmentNumber == tenant.ApartmentNumber).ToList();
-                            var count = apartmentList.Count();
-
-                        }
-
-
-                        <div class="form-group">
-
-                            <select id="selected@(tenant.ApartmentNumber)" class="custom-select" onchange="onChangeSelected(id)">
-
-                                <option selected="">@tenant.LastName</option>
-                                @for (i = 0; i < count; i++)
-                                { 
-                                    <option id="@apartmentList[i].Id"> @apartmentList[i].FirstName </option> 
-                                }
-                            </select>
-                        </div>
-
-                    </td>
-                </tr>
+    @{
+        var i = 0;
+    }
+    <fieldset>
+        <table class="table table-hover">
+            @*מספר הדירות מהדאטה בייס*@
+            @{
+                var apartmentNum = Model.GroupBy(t => t.ApartmentNumber).Count();
             }
-        }
-    </table>
-</fieldset>
+            @for (int j = 1; j <= apartmentNum; j++)
+            {
+
+                var tenant = Model.Where(a => a.ApartmentNumber == j).ToList()[0];
+                {
+                    <tr>
+                        <td> @tenant.ApartmentNumber</td>
+                        <td>
+                            @{
+                                var apartmentList = Model.Where(t => t.ApartmentNumber == tenant.ApartmentNumber).ToList();
+                                var count = apartmentList.Count();
+
+                            }
 
 
+                            <div class="form-group">
+
+                                <select id="selected@(tenant.ApartmentNumber)" class="custom-select" onchange="onChangeSelected(id)">
+
+                                    <option id="-1" selected="">@tenant.LastName</option>
+                                    @for (i = 0; i < count; i++)
+                                    {
+                                        <option id="@apartmentList[i].Id"> @apartmentList[i].FirstName </option>
+                                    }
+                                </select>
+                            </div>
+
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </fieldset>
+
+</div>
 
 
 <script>
@@ -115,62 +116,81 @@
     var tenantId;
 
     function onChangeSelected(id) {
-        var selected = "" + id;
-        var e = document.getElementById(id);
-        tenantId = e.options[e.selectedIndex].id;
+        
+            var selected = "" + id;
+            var e = document.getElementById(id);
+            tenantId = e.options[e.selectedIndex].id;
+        if (tenantId != "-1") {
+            //alert(tenantId);
+            $('#massegeToTenant').html("<p>Write Message to: </p>" + $('#' + selected + ' Option:selected')[0].innerHTML);
+            $("#sendmsg").show();
+        }
 
-        alert(tenantId);
-        $('#massegeToTenant').html("<p>Write Message to: </p>" + $('#' + selected + ' Option:selected')[0].innerHTML );
     }
 
-    function notifyMe() {
+    function hideModal() {
+        $("#sendmsg").hide();
+    }
+    var MessageId;
 
+    function notifyMe() {
         var textMsg = $('#exampleTextarea')[0].value;
 
         var data = {
+
             msg: textMsg,
-            userId: tenantId
+            tenantId: tenantId,
+            imgGuest: "image"
         };
-        alert(""+textMsg);
 
         $.ajax(
             {
                 type: 'POST',
+                async: false,
                 data: data,
                 url: '@Url.Action("SaveNotify","Tenants")',
                 success: function (result) {
-                    alert(result);
+                    MessageId = result;
                 }
             }
         );
 
-        // Let's check if the browser supports notifications
-        if (!("Notification" in window)) {
-            alert("This browser does not support system notifications");
-            // This is not how you would really do things if they aren't supported. :)
-        }
+        if (MessageId != -1) {
+            if (!("Notification" in window)) {
+                alert("This browser does not support system notifications");
+                // This is not how you would really do things if they aren't supported. :)
+            }
 
-        // Let's check whether notification permissions have already been granted
-        else if (Notification.permission === "granted") {
-            // If it's okay let's create a notification
-            var notification = new Notification("Hi there!");
-        }
+            // Let's check whether notification permissions have already been granted
+            else if (Notification.permission === "granted") {
+                // If it's okay let's create a notification
+                var notification = new Notification('Message from a guest', { body: textMsg });
+            }
 
-        // Otherwise, we need to ask the user for permission
-        else if (Notification.permission !== 'denied') {
-            Notification.requestPermission(function (permission) {
-                // If the user accepts, let's create a notification
-                if (permission === "granted") {
-                    var notification = new Notification("Hi there!");
-                }
-            });
-        }
+            // Otherwise, we need to ask the user for permission
+            else if (Notification.permission !== 'denied') {
+                Notification.requestPermission(function (permission) {
+                    // If the user accepts, let's create a notification
+                    if (permission === "granted") {
+                        var notification = new Notification('Message from a guest', { body: textMsg });
+                    }
+                });
+            }
 
-        // Finally, if the user has denied notifications and you 
-        // want to be respectful there is no need to bother them any more.
+            notification.onclick = GoToMsgView(event);
+
+            setTimeout(notification.close.bind(notification), 10000);
+            notification.onclick = GoToMsgView(event);
+
+            // Finally, if the user has denied notifications and you 
+            // want to be respectful there is no need to bother them any more.
+        }
     }
 
-
+    function GoToMsgView(event) {
+        event.preventDefault();
+        window.open('@Url.Action("Message", "Home")' + "?msgId=" + MessageId);
+    }
 </script>
 
 

@@ -34,9 +34,26 @@ namespace NEW.Controllers
         {
             return View();
         }
+        //public void OnClickNotify(string message, string imageGuest)
+        //{
+        //    Message( message,  imageGuest);
+        //}
+        //[HttpPost]
+        //public PartialViewResult Message(string message, string imageGuest)
+        //{
+        //    ViewBag.Message = message;
+        //    ViewBag.Image = imageGuest;
+        //    return PartialView();
+        //}
 
-        public ActionResult Message()
+        public ActionResult Message(int msgId)
         {
+            using(ApplicationDbContext context = new ApplicationDbContext())
+            {
+                var Message = context.Notifications.FirstOrDefault(m => m.id == msgId);
+                ViewBag.Message = Message.GuestMessage;
+            };
+           // ViewBag.Image = imageGuest;
             return View();
         }
 
@@ -52,8 +69,7 @@ namespace NEW.Controllers
         {
             return View();
         }
-
-      
+        
         /// <summary>
         ///יקבל מזהה של בניין וכך יזהה את הקוד ואת כל מה שצריך
         /// </summary>

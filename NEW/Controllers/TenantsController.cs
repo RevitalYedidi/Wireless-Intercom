@@ -32,10 +32,29 @@ namespace NEW.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveNotify(string msg, string userId)
+        public JsonResult SaveNotify(int tenantId, string msg, string imgGuest)
         {
+            Notifications notify = new Notifications();
+            try
+            {
+                using (ApplicationDbContext context = new ApplicationDbContext())
+                {
+                    notify.TenantId = tenantId;
+                    notify.GuestMessage = msg;
+                    notify.ImgUrl = imgGuest;
+                    notify.IsOpen = false;
 
-            return Json(true);
+                    context.Notifications.Add(notify);
+
+                    context.SaveChanges();
+                };
+                return Json(notify.id);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return Json(-1);
+            }
         }
     }
 }
