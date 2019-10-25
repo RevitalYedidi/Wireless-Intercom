@@ -23,7 +23,9 @@
 
     }*@
 
-<button type="button" class="btn btn-outline-danger" data-target="#sendmsg" data-toggle="modal">Click me</button>
+<button type="button" class="btn btn-primary" data-target="#sendmsg" data-toggle="modal">Send Message To Tenant</button>
+<button type="button" style="float: right;" class="btn btn-danger" onclick="history.go(-1);">Back</button>
+<br />
 
 @* popup msg *@
 <div class="modal" id="sendmsg">
@@ -101,6 +103,8 @@
 </fieldset>
 
 
+
+
 <script>
 
     //void function select_SelectedIndexChanged(object sender, EventArgs e,)
@@ -109,14 +113,14 @@
     //}
 
     var tenantId;
+
     function onChangeSelected(id) {
         var selected = "" + id;
         var e = document.getElementById(id);
         tenantId = e.options[e.selectedIndex].id;
 
         alert(tenantId);
-        $('#massegeToTenant').html("<p>Write Message to: </p>" + $('#' + selected + ' Option:selected')[0].innerHTML);
-        
+        $('#massegeToTenant').html("<p>Write Message to: </p>" + $('#' + selected + ' Option:selected')[0].innerHTML );
     }
 
     function notifyMe() {

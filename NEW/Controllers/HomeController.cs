@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NEW.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +9,8 @@ namespace NEW.Controllers
 {
     public class HomeController : Controller
     {
+
+        private ApplicationDbContext _context;
         public ActionResult Index()
         {
             return View();
@@ -50,14 +53,47 @@ namespace NEW.Controllers
             return View();
         }
 
-        public ActionResult Tenant_Area()
-        {
-            return View();
-        }
-
+      
+        /// <summary>
+        ///יקבל מזהה של בניין וכך יזהה את הקוד ואת כל מה שצריך
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Admin()
         {
-            return View();
+            using (ApplicationDbContext context = new ApplicationDbContext())
+            {
+                var building = context.Buildings.FirstOrDefault(b => b.Id == 1);
+
+                return View(building);
+            };
         }
+
+        public JsonResult ChangeCode(string BuildingID)
+        {
+            return Json(true);
+        }
+
+        //בעתיד להוסיף": לשלוח לפונקציה גם מספק בניין לדעת איזה קוד של בניין אנחנו בודקים
+        //כרגע זה רק על בניין מספר 1
+       
+        public JsonResult CheckCode(string InsertedCode)
+        {
+            string code = InsertedCode.Replace(",", "");
+
+            using (ApplicationDbContext context = new ApplicationDbContext())
+            {
+                var TheCode = context.Buildings.FirstOrDefault(b => b.Id == 1).CyferCode;
+
+                if (code == TheCode.ToString())
+                {
+                    return Json("Confirmed");
+                }
+                else
+                {
+                    return Json("Not Confirmed");
+                }
+            };
+        }
+
     }
 }

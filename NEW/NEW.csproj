@@ -180,25 +180,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201910051758434_initialModel.cs" />
-    <Compile Include="Migrations\201910051758434_initialModel.Designer.cs">
-      <DependentUpon>201910051758434_initialModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910051842477_initialModel1.cs" />
-    <Compile Include="Migrations\201910051842477_initialModel1.Designer.cs">
-      <DependentUpon>201910051842477_initialModel1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910051934411_initialModel2.cs" />
-    <Compile Include="Migrations\201910051934411_initialModel2.Designer.cs">
-      <DependentUpon>201910051934411_initialModel2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910121937547_initialModel3.cs" />
-    <Compile Include="Migrations\201910121937547_initialModel3.Designer.cs">
-      <DependentUpon>201910121937547_initialModel3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910121945284_newModel.cs" />
-    <Compile Include="Migrations\201910121945284_newModel.Designer.cs">
-      <DependentUpon>201910121945284_newModel.cs</DependentUpon>
+    <Compile Include="Migrations\201910200753247_new.cs" />
+    <Compile Include="Migrations\201910200753247_new.Designer.cs">
+      <DependentUpon>201910200753247_new.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -236,6 +220,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\Modal.css" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -277,7 +262,7 @@
     <Content Include="Views\Home\Main.cshtml" />
     <Content Include="Views\Home\Message.cshtml" />
     <Content Include="Views\Tenants\Tenants_List.cshtml" />
-    <Content Include="Views\Home\Tenant_Area.cshtml" />
+    <Content Include="Views\Tenants\Tenant_Area.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -297,20 +282,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201910051758434_initialModel.resx">
-      <DependentUpon>201910051758434_initialModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910051842477_initialModel1.resx">
-      <DependentUpon>201910051842477_initialModel1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910051934411_initialModel2.resx">
-      <DependentUpon>201910051934411_initialModel2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910121937547_initialModel3.resx">
-      <DependentUpon>201910121937547_initialModel3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910121945284_newModel.resx">
-      <DependentUpon>201910121945284_newModel.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201910200753247_new.resx">
+      <DependentUpon>201910200753247_new.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

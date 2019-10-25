@@ -26,8 +26,8 @@ namespace NEW.Models
         public DbSet<Notifications> Notifications { get; set; }
 
 
-        public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+        public ApplicationDbContext() 
+            : base("NEW-DB", throwIfV1Schema: false)
         {
         }
 

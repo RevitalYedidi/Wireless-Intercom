@@ -2,9 +2,12 @@
 @{
     ViewBag.Title = "Entrance";
 }
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/jquery-3.3.1.slim.js"></script>
+<link href="~/Scripts/Modal.css" rel="stylesheet" />
 
 <style>
-
 
     .table-secondary {
         table-layout: fixed;
@@ -29,13 +32,15 @@
             max-width: 100px;
             max-height: 90px;
             font-size: 170%;
+            cursor: pointer;
         }
 
-    #btn {
-        width: 100px;
+    .btn {
+        width: 300px;
         margin: auto;
         margin-top: 3%;
         display: block;
+
     }
 
     #code {
@@ -48,40 +53,143 @@
         margin: auto;
         margin-top: 3%;
     }
-
 </style>
 
-
-<div id="code" class="alert alert-dismissible alert-success" align="center">
-    <strong> *&emsp;*&emsp;*&emsp;* </strong>
+<button id="guestButton" type="button" class="btn btn-primary" onclick="GoToTenantsList()" align="center">
+    Geust ?
+</button>
+<div id="code" class="alert alert-dismissible alert-success" align="center" >
+    <strong id="strongCode">  </strong>
 </div>
-    
-    <table class="table-secondary" border="1" align="center">
-        <tr class="table-secondary">
-            <td id="1">1</td>
-            <td id="2">2</td>
-            <td id="3">3</td>
-        </tr>
-        <tr class="table-secondary">
-            <td id="4">4</td>
-            <td id="5">5</td>
-            <td id="6">6</td>
-        </tr>
-        <tr class="table-secondary">
-            <td id="7">7</td>
-            <td id="8">8</td>
-            <td id="9">9</td>
-        </tr>
-        <tr class="table-secondary">
-            <td id="*">*</td>
-            <td id="0">0</td>
-            <td id="#">#</td>
-        </tr>
-    </table>
 
-    <button id="btn" type="button" class="btn btn-primary" onclick="alert('hello');">
-        Geust ?
-    </button>
+<table class="table-secondary" border="1" align="center">
+    <tr class="table-secondary">
+        <td id="1" onclick="GetChar(id)">1</td>
+        <td id="2" onclick="GetChar(id)">2</td>
+        <td id="3" onclick="GetChar(id)">3</td>
+    </tr>
+    <tr class="table-secondary">
+        <td id="4" onclick="GetChar(id)">4</td>
+        <td id="5" onclick="GetChar(id)">5</td>
+        <td id="6" onclick="GetChar(id)">6</td>
+    </tr>
+    <tr class="table-secondary">
+        <td id="7" onclick="GetChar(id)">7</td>
+        <td id="8" onclick="GetChar(id)">8</td>
+        <td id="9" onclick="GetChar(id)">9</td>
+    </tr>
+    <tr class="table-secondary">
+        <td id="*" onclick="GetChar(id)">*</td>
+        <td id="0" onclick="GetChar(id)">0</td>
+        <td id="#" onclick="GetChar(id)">#</td>
+    </tr>
+</table>
+
+<button id="enter" type="button" class="btn btn-primary" onclick="CheckCode()" align="center">
+    Enter
+</button>
+<div id="myModal" class="modal">
+
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>Hello!</h2>
+        </div>
+        <div id="modalBody" class="modal-body">
+        </div>
+        <button id="modalButton" class="btn btn-dark">Ok</button><br />
+    </div>
+
+</div>
+
+<script>
+    var InsertedCode = [];
+    var countChar = 0;
+    $(document).ready(function () {
+        //var tds = document.getElementsByTagName("td");
+        //for (var i = 0; i < tds.length; i++) {
+        //    tds[i].click = alert(1);
+        //}
+
+        });
+        function GoToTenantsList() {
+            location.href = '@Url.Action( "Tenants_List", "Tenants" )';
+    }
+    function GetChar(id) {
+        if (countChar >= 4) {
+            return;
+        }
+        else {
+            countChar++;
+            InsertedCode.push(id);
+            console.log(InsertedCode);
+            $("#strongCode").append(" * ");
+        }
+    }
+    function CheckCode()
+    {
+        $.ajax(
+            {
+                type: 'POST',
+                data: { InsertedCode: InsertedCode.toString() },
+                url: '@Url.Action("CheckCode","Home")',
+                success: function (result) {
+                    IsConfirmed(result);
+                }
+            });
+
+    }
+
+    function IsConfirmed(text) {
+        if (text == "Confirmed") {
+            $("#modalButton").hide();
+            $("#modalBody").html("<b>The Door Is Open!</b>");
+            
+            modal.style.display = "block";
+            setTimeout(function () { modal.style.display = "none"; }, 5000);
+
+            $("#strongCode").html("");
+            InsertedCode = [];
+            countChar = 0;
+            //alert("open door");
+        }
+        else {
+            $("#modalButton").show();
+            $("#modalBody").html("<b>The Code You Entered Is Wrong! </b>");
+            $("#strongCode").html("");
+            InsertedCode = [];
+            countChar = 0;
+            modal.style.display = "block";
+            //alert("The Code Is Wrong! Try Again!");
+        }
+    }
+
+    var modal = document.getElementById("myModal");
+    var ModalButton = document.getElementById("modalButton");
+    ModalButton.onclick = function () {
+        modal.style.display = "none";
+    }
+        
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+
+
+
+
+</script>
+
 
 
 

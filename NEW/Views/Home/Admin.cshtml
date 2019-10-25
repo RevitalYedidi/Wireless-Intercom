@@ -1,14 +1,15 @@
-﻿
+﻿@model NEW.Models.Building;
+
 @{
     ViewBag.Title = "Admin";
 }
 
 @*if(username and pass are valid and own to admin) then*@
-
+<link href="~/Scripts/Modal.css" rel="stylesheet" />
 <style>
     .list-group-item-action {
         border-color: #18BC9C; /*success*/
-        font-size:120%;
+        font-size: 120%;
     }
 </style>
 
@@ -26,9 +27,55 @@
             </a>
         </div>
         <div class="card border-success mb-3">
-            <a href="#" class="list-group-item list-group-item-action text-white bg-success">
+            <a href="#" class="list-group-item list-group-item-action text-white bg-success" id="changeCodeBtn">
                 Change code
             </a>
+            <p>asdkjnmsklad + @Model.FirstOrDefault(i => i.Id == 1).Id</p>
         </div>
     </div>
 </div>
+
+<div id="myModal" class="modal">
+
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>Change Building Code</h2>
+        </div>
+        <div id="modalBody" class="modal-body">
+            <form>
+            </form>
+        </div>
+        <button id="modalButton" class="btn btn-dark">Ok</button><br />
+    </div>
+
+</div>
+
+<script>
+    var modal = document.getElementById("myModal");
+    var changeCodeBtn = document.getElementById("changeCodeBtn");
+    changeCodeBtn.onclick = function () {
+        modal.style.display = "block";
+    }
+
+    var ModalButton = document.getElementById("modalButton");
+    ModalButton.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+
+</script>

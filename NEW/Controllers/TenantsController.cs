@@ -17,7 +17,11 @@ namespace NEW.Controllers
             _context = new ApplicationDbContext();
           
         }
-        
+        public ActionResult Tenant_Area()
+        {
+            return View();
+        }
+
 
         public ActionResult Tenants_List()
         {
