@@ -75,9 +75,9 @@
                 <div class="modal-body">
                     <div class="form-group">
                         @*@Html.LabelFor(t => t.Id)
-                        @Html.TextBoxFor(t => t.Id, new {  id = "idTenant", @readonly = "readonly", @style = "width: 60px;" })*@
+        @Html.TextBoxFor(t => t.Id, new {  id = "idTenant", @readonly = "readonly", @style = "width: 60px;" })*@
 
-                        <h5  class="card-header">Private Details:</h5><br />
+                        <h5 class="card-header">Private Details:</h5><br />
                         <div class="col-md-10">
                             @Html.LabelFor(t => t.FirstName)
                             @Html.TextBoxFor(t => t.FirstName, new { @class = "form-control", id = "FirstName" })
@@ -87,6 +87,8 @@
                             @Html.LabelFor(t => t.LastName)
                             @Html.TextBoxFor(t => t.LastName, new { @class = "form-control", id = "LastName" })
                         </div>
+                        <label style="color:red;display:none;" id="DetailsErr" class="label-danger"> Fields Cannot Be Empty</label>
+
                         <br />
                         <div class="col-md-10">
                             <button type="button" class="btn-sm" onclick="SaveDetailsClick()">Save Details</button>
@@ -105,7 +107,7 @@
                             @Html.Label("Confirm Password")
                             <input id="ConfirmPassword" type="password" class="form-control" />
                         </div><br />
-                        <label style="color:red;display:none;" id="passwordErr" class="label-danger">  Password Inputs Are Not Matches</label>
+                        <label style="color:red;display:none;" id="passwordErr" class="label-danger">  Password Inputs Are Not Matches or Empty</label>
                         <div class="col-md-10">
                             <button type="button" class="btn-sm" onclick="ChangePasswordClick()">Save Password</button>
                         </div>
@@ -124,6 +126,11 @@
 <script>
     function hideModal() {
         $("#ChangeDetails").hide();
+        $("#OldPassword").val() = "";
+        $("#NewPassword").val() = "";
+        $("#ConfirmPassword").val() = "";
+        $("#passwordErr").hide();
+        $("#DetailsErr").hide();
     }
     var modal = document.getElementById("myModal");
     var openDoorButton = document.getElementById("openDoor");
@@ -157,28 +164,35 @@
 
     function SaveDetailsClick() {
         $("#passwordErr").hide();
-        var data = {
-            Id: @ViewBag.TenantData.Id,
-            FirstName: $("#FirstName").val(),
-            LastName: $("#LastName").val()
-        };
+        $("#DetailsErr").show();
+        if ($("#FirstName").val() == "" || $("#LastName").val() == "") {
+            $("#DetailsErr").show();
+        }
+        else {
+            var data = {
+                Id: @ViewBag.TenantData.Id,
+                FirstName: $("#FirstName").val(),
+                LastName: $("#LastName").val()
+            };
 
-       $.ajax(
-            {
-                type: 'POST',
-                data: data,
-                url: '@Url.Action("SaveDetails","Tenants")',
-                success: function (result) {
-                    alert(result);
+            $.ajax(
+                {
+                    type: 'POST',
+                    data: data,
+                    url: '@Url.Action("SaveDetails","Tenants")',
+                    success: function (result) {
+                        alert(result);
+                    }
                 }
-            }
-        );
+            );
+        }
     }
 
     function ChangePasswordClick() {
 
         $("#passwordErr").hide();
-        if ($("#ConfirmPassword").val() != $("#NewPassword").val()) {
+        $("#DetailsErr").hide();
+        if ($("#ConfirmPassword").val() != $("#NewPassword").val() || $("#NewPassword").val() =="") {
             $("#passwordErr").show();
         }
 

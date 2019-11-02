@@ -1,82 +1,152 @@
-﻿
+﻿@model NEW.Models.Building
 
 @{
     ViewBag.Title = "Admin";
 }
 
 @*if(username and pass are valid and own to admin) then*@
-<link href="~/Scripts/Modal.css" rel="stylesheet" />
 <style>
     .list-group-item-action {
         border-color: #18BC9C; /*success*/
         font-size: 120%;
     }
 </style>
-
-<div align="center" style="margin-top:3%;">
-    <h2><b>Admin options</b></h2>
-    <button type="button" style="float: right;" class="btn btn-danger" onclick="history.go(-1);">Back</button>
-    <div class="list-group" style="width: 30rem; margin-top:4%; margin-bottom: 9%;">
-        <div class="card mb-3">
-            <a href="#" class="list-group-item list-group-item-action text-white bg-success">
-                List of entrances
-            </a>
+@if(ViewBag.IsAdmin){
+        <div align="center" style="margin-top:3%;">
+            <h2><b>Admin options</b></h2>
+            <button type="button" style="float: right;" class="btn btn-danger" onclick="history.go(-1);">Back</button>
+            <div class="list-group" style="width: 30rem; margin-top:4%; margin-bottom: 9%;">
+                <div class="card mb-3">
+                    <a href="#" class="list-group-item list-group-item-action text-white bg-success">
+                        List of entrances
+                    </a>
+                </div>
+                <div class="card border-success mb-3">
+                    <a href="#" class="list-group-item list-group-item-action text-white bg-success">
+                        Add and edit tenants
+                    </a>
+                </div>
+                <div class="card border-success mb-3">
+                    <a href="#" class="list-group-item list-group-item-action text-white bg-success" id="changeCodeBtn">
+                        Change code
+                    </a>
+                    @*<p>asdkjnmsklad + @Model.FirstOrDefault(i => i.Id == 1).Id</p>*@
+                </div>
+            </div>
         </div>
-        <div class="card border-success mb-3">
-            <a href="#" class="list-group-item list-group-item-action text-white bg-success">
-                Add and edit tenants
-            </a>
-        </div>
-        <div class="card border-success mb-3">
-            <a href="#" class="list-group-item list-group-item-action text-white bg-success" id="changeCodeBtn">
-                Change code
-            </a>
-            @*<p>asdkjnmsklad + @Model.FirstOrDefault(i => i.Id == 1).Id</p>*@
-        </div>
-    </div>
-</div>
 
-<div id="myModal" class="modal">
+        <div class="modal" id="myModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    @*title*@
+                    <div class="modal-header">
+                        <h5 id="massegeToTenant" class="modal-title">Change Code For Building Number @ViewBag.Building.Id</h5>
+                        <button onclick="hideModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    @*body of popup*@
+                    <div class="modal-body">
+                        <div class="form-group">
+                            @*@Html.LabelFor(t => t.Id)
+        @Html.TextBoxFor(t => t.Id, new {  id = "idTenant", @readonly = "readonly", @style = "width: 60px;" })*@
 
-    <div class="modal-content">
-        <div class="modal-header">
-            <span class="close">&times;</span>
-            <h2>Change Building Code</h2>
-        </div>
-        <div id="modalBody" class="modal-body">
-            <form>
-            </form>
-        </div>
-        <button id="modalButton" class="btn btn-dark">Ok</button><br />
-    </div>
+                            <div class="col-md-10">
+                                @Html.Label("Current Code")
+                                <input id="CurrentCode" type="password" class="form-control" maxlength="4" />
+                            </div><br />
+                            <div class="col-md-10">
+                                @Html.Label("New Code")
+                                <input id="NewCode" type="password" class="form-control" maxlength="4" />
+                            </div><br /><div class="col-md-10">
+                                @Html.Label("Confirm New Code")
+                                <input id="ConfirmNewCode" type="password" class="form-control" maxlength="4" />
+                            </div>
+                                        <label id="CodeErr" class="label-danger" style="color:red; display:none;">Password inputs are not matches or Empty</label>  
 
-</div>
+                        </div>
+                        </div>
+                        @* buttons *@
+                <div class="modal-footer">
+                    @*add popup wait to answer*@
+                    <button onclick="ChangeCode()" type="button" class="btn btn-primary" data-dismiss="modal">Save Changes</button>
 
-<script>
-    var modal = document.getElementById("myModal");
-    var changeCodeBtn = document.getElementById("changeCodeBtn");
-    changeCodeBtn.onclick = function () {
-        modal.style.display = "block";
-    }
+                    <button onclick="hideModal()" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
 
-    var ModalButton = document.getElementById("modalButton");
-    ModalButton.onclick = function () {
-        modal.style.display = "none";
-    }
+                    </div>
+                </div>
+            </div>
+            }
 
-    var span = document.getElementsByClassName("close")[0];
+            else
+            {
+            <br />
+            <h1> You Have No Admin Permissions! </h1>
+            }
 
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
+            <script>
+                function hideModal() {
+                    $("#myModal").hide();
+                    $("#CurrentCode").val() = "";
+                    $("#NewCode").val()= "";
+                    $("#ConfirmNewCode").val() = "";
+                    $("#CodeErr").hide();
 
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
+                }
+                var modal = document.getElementById("myModal");
+                var changeCodeBtn = document.getElementById("changeCodeBtn");
+                changeCodeBtn.onclick = function () {
+                    modal.style.display = "block";
+                }
 
+                var ModalButton = document.getElementById("modalButton");
+                ModalButton.onclick = function () {
+                    modal.style.display = "none";
+                }
 
-</script>
+                var span = document.getElementsByClassName("close")[0];
+
+                // When the user clicks on <span> (x), close the modal
+                span.onclick = function () {
+                    modal.style.display = "none";
+                }
+
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+
+                function ChangeCode() {
+                    
+                    $("#CodeErr").hide();
+                    if ($("#CurrentCode").val() == "" || $("#ConfirmNewCode").val() == "" || $("#NewCode").val() == "") {
+                        $("#CodeErr").show();
+                    }
+                    else {
+                        if ($("#ConfirmNewCode").val() != $("#NewCode").val()) {
+                            $("#CodeErr").show();
+                        }
+                        else {
+                            var data = {
+                                Id: @ViewBag.Building.Id ,
+                                CurrentCode: $("#CurrentCode").val(),
+                                NewCode: $("#NewCode").val()
+                            }
+
+                            $.ajax(
+                                {
+                                    type: 'POST',
+                                    data: data,
+                                    url: '@Url.Action("ChangeCode","Home")',
+                                    success: function (result) {
+                                        alert(result);
+                                    }
+                                }
+                            );
+                        }
+                    }
+                }
+            </script>

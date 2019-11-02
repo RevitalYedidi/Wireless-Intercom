@@ -169,17 +169,41 @@ namespace NEW.Controllers
             {
                 using (ApplicationDbContext context = new ApplicationDbContext())
                 {
+                    var Tenant = context.Tenants.FirstOrDefault(t => t.UserEmail == LoginSession);
+                    ViewBag.IsAdmin = Tenant.Admin; 
                     var building = context.Buildings.FirstOrDefault(b => b.Id == 1);
-
+                    ViewBag.Building = building;
                     return View(building);
                 };
             }
             return RedirectToAction("Login", "Home");
         }
 
-        public JsonResult ChangeCode(string BuildingID)
+        public JsonResult ChangeCode(string CurrentCode, string NewCode, string Id)
         {
-            return Json(true);
+            try
+            {
+                using (ApplicationDbContext context = new ApplicationDbContext())
+                {
+                    var building = context.Buildings.FirstOrDefault(b => b.Id.ToString() == Id);
+
+                    if (building.CyferCode.ToString() != CurrentCode)
+                    {
+                        return Json("Wrong Password!");
+                    }
+                    else
+                    {
+                        building.CyferCode = NewCode;
+
+                        context.SaveChanges();
+                        return Json("The Code Was Succefully Saved! ");
+                    }
+                };
+            }
+            catch(Exception e)
+            {
+                return Json("Something Went Wrong " + e.Message);
+            }
         }
 
         //בעתיד להוסיף": לשלוח לפונקציה גם מספק בניין לדעת איזה קוד של בניין אנחנו בודקים
