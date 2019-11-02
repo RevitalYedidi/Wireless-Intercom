@@ -21,10 +21,11 @@ namespace NEW.Controllers
             if (LoginSession != "")
             {
                 var Tenant = _context.Tenants.FirstOrDefault(i => i.UserEmail == LoginSession.ToString());
+                ViewBag.TenantData = Tenant;
                 ViewBag.userMail = LoginSession;
                 ViewBag.IsAdmin = Tenant.Admin.ToString();
                 ViewBag.FirstName = Tenant.FirstName.ToString();
-                return View();
+                return View(Tenant);
             }
 
             //routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
@@ -42,7 +43,57 @@ namespace NEW.Controllers
                 return View(Tenants);
             
         }
+        [HttpPost]
+        public JsonResult SaveDetails(string FirstName, string LastName, string Id)
+        {
+            try
+            {
+                using (ApplicationDbContext context = new ApplicationDbContext())
+                {
+                    var Tenant = context.Tenants.FirstOrDefault(t => t.Id.ToString() == Id);
 
+                    Tenant.FirstName = FirstName;
+                    Tenant.LastName = LastName;
+
+                    context.SaveChanges();
+
+                    return Json("Details Succesfuly Saved!");
+                };
+            }
+            catch(Exception e )
+            {
+                return Json("  There Was A Problem " + e.Message);
+            }
+        }
+        [HttpPost]
+        public JsonResult ChangePassword(string OldPassword , string NewPassword, string Id)
+        {
+            try
+            {
+                using (ApplicationDbContext context = new ApplicationDbContext())
+                {
+                    var Tenant = context.Tenants.FirstOrDefault(t => t.Id.ToString() == Id);
+
+                    if(Tenant.UserPassword != OldPassword)
+                    {
+                        return Json("Wrong Password");
+                    }
+                    else
+                    {
+                        Tenant.UserPassword = NewPassword;
+
+                        context.SaveChanges();
+                        return Json("Details Succesfuly Saved!");
+                    }
+
+                };
+            }
+            catch (Exception e)
+            {
+                return Json("  There Was A Problem " + e.Message);
+            }
+
+        }
         [HttpPost]
         public JsonResult SaveNotify(int tenantId, string msg, string imgGuest)
         {

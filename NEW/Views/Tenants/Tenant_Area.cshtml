@@ -1,9 +1,9 @@
-﻿
+﻿@model NEW.Models.Tenant
 @{
     ViewBag.Title = "Tenant_Area";
 }
 
-    <link href="~/Scripts/Modal.css" rel="stylesheet" />
+@*<link href="~/Scripts/Modal.css" rel="stylesheet" />*@
 <style>
     .btn {
         margin-top: 3%;
@@ -25,43 +25,106 @@
 </style>
 
 
-     <div align="center">
+<div align="center">
 
-         <br />
-         <h4>Hello @ViewBag.FirstName, what would you like to do?</h4>
+    <br />
+    <h4>Hello @ViewBag.TenantData.FirstName, what would you like to do?</h4>
 
-         <button type="button" class="btn btn-success btn-lg">Change detials</button>
-         <div>
-             <button id="openDoor" type="button" class="btn btn-warning" >Open door</button>
-         </div>
+    <button type="button" class="btn btn-success btn-lg" onclick="ChangeDetailsClick()">Change detials</button>
+    <div>
+        <button id="openDoor" type="button" class="btn btn-warning">Open door</button>
+    </div>
 
-         <div id="myModal" class="modal">
+    <div id="myModal" class="modal">
 
-             <div class="modal-content">
-                 <div class="modal-header">
-                     <span class="close">&times;</span>
-                     <h2>Hello!</h2>
-                 </div>
-                 <div id="modalBody" class="modal-body">
-                     <p><b>The Door Is Open!</b></p>
-                 </div>
-             </div>
+        <div class="modal-content" style="width: 35%; margin-top: 8%;">
+            <div class="modal-header">
+                <span style="float:left;" class="close">&times;</span>
+                <h2 style="float:left;">The Door Is Open!</h2>
+            </div>
+            <div id="modalBody" class="modal-body">
+                @*<p><b>The Door Is Open!</b></p>*@
+            </div>
+        </div>
 
-         </div>
+    </div>
 
-         @if ( @ViewBag.IsAdmin == "True" )
-         {
-             <button type="button" class="btn btn-outline-danger" onclick="OnClickAdmin()">Admin area</button>
-         }
+    @if (@ViewBag.IsAdmin == "True")
+    {
+        <button type="button" class="btn btn-outline-danger" onclick="OnClickAdmin()">Admin area</button>
+    }
 
-     </div>
-    
-     @*else
-     { <p> User Mail is invalid!</p>
-     }*@
+</div>
+
+@*else
+    { <p> User Mail is invalid!</p>
+    }*@
+
+    @* popup msg *@
+    <div class="modal" id="ChangeDetails">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @*title*@
+                <div class="modal-header">
+                    <h5 id="massegeToTenant" class="modal-title">Change Details - @ViewBag.FirstName</h5>
+                    <button onclick="hideModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @*body of popup*@
+                <div class="modal-body">
+                    <div class="form-group">
+                        @*@Html.LabelFor(t => t.Id)
+                        @Html.TextBoxFor(t => t.Id, new {  id = "idTenant", @readonly = "readonly", @style = "width: 60px;" })*@
+
+                        <h5  class="card-header">Private Details:</h5><br />
+                        <div class="col-md-10">
+                            @Html.LabelFor(t => t.FirstName)
+                            @Html.TextBoxFor(t => t.FirstName, new { @class = "form-control", id = "FirstName" })
+                        </div>
+                        <br />
+                        <div class="col-md-10">
+                            @Html.LabelFor(t => t.LastName)
+                            @Html.TextBoxFor(t => t.LastName, new { @class = "form-control", id = "LastName" })
+                        </div>
+                        <br />
+                        <div class="col-md-10">
+                            <button type="button" class="btn-sm" onclick="SaveDetailsClick()">Save Details</button>
+                        </div>
+                        <br />
+                        <h5 class="card-header">Password:</h5><br />
+                        <div class="col-md-10">
+                            @Html.Label("Old Password")
+                            <input id="OldPassword" type="password" class="form-control" />
+                        </div>
+                        <div class="col-md-10">
+                            @Html.Label("New Password")
+                            <input id="NewPassword" type="password" class="form-control" />
+                        </div>
+                        <div class="col-md-10">
+                            @Html.Label("Confirm Password")
+                            <input id="ConfirmPassword" type="password" class="form-control" />
+                        </div><br />
+                        <label style="color:red;display:none;" id="passwordErr" class="label-danger">  Password Inputs Are Not Matches</label>
+                        <div class="col-md-10">
+                            <button type="button" class="btn-sm" onclick="ChangePasswordClick()">Save Password</button>
+                        </div>
+                    </div>
+                        @* buttons *@
+                        <div class="modal-footer">
+                            @*add popup wait to answer*@
+                            <button onclick="hideModal()" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </div>
+
+                    </div>
+        </div>
+    </div>
 
 
 <script>
+    function hideModal() {
+        $("#ChangeDetails").hide();
+    }
     var modal = document.getElementById("myModal");
     var openDoorButton = document.getElementById("openDoor");
 
@@ -69,7 +132,7 @@
         modal.style.display = "block";
         setTimeout(function () { modal.style.display = "none"; }, 5000);
     }
-    
+
     var span = document.getElementsByClassName("close")[0];
 
     // When the user clicks on <span> (x), close the modal
@@ -83,9 +146,59 @@
         modal.style.display = "none";
       }
     }
-    
+
     function OnClickAdmin() {
         location.href = '@Url.Action("Admin", "Home")';
+    }
+
+    function ChangeDetailsClick() {
+        $("#ChangeDetails").show();
+    }
+
+    function SaveDetailsClick() {
+        $("#passwordErr").hide();
+        var data = {
+            Id: @ViewBag.TenantData.Id,
+            FirstName: $("#FirstName").val(),
+            LastName: $("#LastName").val()
+        };
+
+       $.ajax(
+            {
+                type: 'POST',
+                data: data,
+                url: '@Url.Action("SaveDetails","Tenants")',
+                success: function (result) {
+                    alert(result);
+                }
+            }
+        );
+    }
+
+    function ChangePasswordClick() {
+
+        $("#passwordErr").hide();
+        if ($("#ConfirmPassword").val() != $("#NewPassword").val()) {
+            $("#passwordErr").show();
+        }
+
+        else {
+            var data = {
+                Id: @ViewBag.TenantData.Id,
+                OldPassword: $("#OldPassword").val(),
+                NewPassword: $("#NewPassword").val()
+            };
+            $.ajax(
+                {
+                    type: 'POST',
+                    data: data,
+                    url: '@Url.Action("ChangePassword","Tenants")',
+                    success: function (result) {
+                        alert(result);
+                    }
+                }
+            );
+        }
     }
 </script>
 
