@@ -36,14 +36,11 @@ namespace NEW.Controllers
 
         public ActionResult Tenants_List()
         {
-            if (LoginSession != "")
-            {
                 IsApprove = "false";
                 var Tenants = _context.Tenants.Where(i => i.BuildingId == 1).ToList();
                 //var TenantsFromBuikding = 
                 return View(Tenants);
-            }
-            return RedirectToAction("Login", "Home");
+            
         }
 
         [HttpPost]

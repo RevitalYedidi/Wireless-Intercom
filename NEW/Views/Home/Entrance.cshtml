@@ -40,7 +40,6 @@
         margin: auto;
         margin-top: 3%;
         display: block;
-
     }
 
     #code {
@@ -54,13 +53,17 @@
         margin-top: 3%;
     }
 </style>
-
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <button id="guestButton" type="button" class="btn btn-primary" onclick="GoToTenantsList()" align="center">
     Geust ?
 </button>
-<div id="code" class="alert alert-dismissible alert-success" align="center" >
-    <strong id="strongCode">  </strong>
+<div class="row" style="width: 33%;margin-left: 37%;">
+    <div id="code" class="alert alert-dismissible alert-success" style="margin-top: 20px;" align="center">
+        <strong id="strongCode">  </strong>
+    </div><button type="button" onclick="CleanCode()" class="btn btn-primary" style="width: 35px; margin-top: 30px;"><i class="fa fa-trash"></i></button>
 </div>
+
 
 <table class="table-secondary" border="1" align="center">
     <tr class="table-secondary">
@@ -144,7 +147,7 @@
         if (text == "Confirmed") {
             $("#modalButton").hide();
             $("#modalBody").html("<b>The Door Is Open!</b>");
-            
+
             modal.style.display = "block";
             setTimeout(function () { modal.style.display = "none"; }, 5000);
 
@@ -169,7 +172,7 @@
     ModalButton.onclick = function () {
         modal.style.display = "none";
     }
-        
+
     var span = document.getElementsByClassName("close")[0];
 
     // When the user clicks on <span> (x), close the modal
@@ -185,7 +188,12 @@
     }
 
 
-
+    function CleanCode()
+    {
+        $("#strongCode").html("");
+            InsertedCode = [];
+            countChar = 0;
+    }
 
 
 </script>
