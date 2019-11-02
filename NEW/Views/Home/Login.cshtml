@@ -1,14 +1,17 @@
-﻿
+﻿@using NEW.Models
+@model LoginViewModel
+
+
 @{
     ViewBag.Title = "Login";
 }
 
 <script>
-    
-        Notification.requestPermission().then(function (result) {
-            console.log(result);
-        });
-    
+
+    Notification.requestPermission().then(function (result) {
+        console.log(result);
+    });
+
 </script>
 
 <style>
@@ -32,24 +35,31 @@
 
 
 <div align="center">
-    <div id="msg" class="card border-success mb-3">
+    <div id="msg" class="card border-success mb-3" >
         <h4 class="card-header">Login</h4>
         <div class="card-body">
 
-            <form>
+            <form id="form" on>
                 <fieldset>
                     <div class="form-group">
-                        <label for="email">Email address</label>
-                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label", @style = "max-width: inherit;" })
+
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Password">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your password with anyone else.</small>
+                        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label", @style = "max-width: inherit;" })
+                        <div class="col-md-10">
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
                     </div>
+                    <label class="text-danger" id="Wrong" style="display:none;">Wrong Email Or Password</label>
 
                     <div align="right">
-                        <button type="submit" class="btn btn-primary btn-lg" onsubmit="onclick()">Submit</button>
+                        <button type="button" class="btn btn-primary btn-lg" onclick="CheckLogin()">Log in</button>
                     </div>
                 </fieldset>
             </form>
@@ -59,8 +69,33 @@
 </div>
 
 <script>
-    function onclick()
-    {
-        location.href('@Url.Action("Home","Tenant_Area")');
+    function CheckLogin() {
+
+        $("#Wrong").hide();
+        var form = $("#form");
+        var result;
+        //Show loading display here
+        //var form = $("#shareForm");
+        $.ajax({
+            url: '@Url.Action("CheckLogin", "Home")',
+            async: false,
+            data: form.serialize(),
+            type: 'POST',
+            success: function (data) {
+                //Show popup
+                result = data;
+            }
+        });
+
+        if (result == "LogIn") {
+            location.href = '@Url.Action("Tenant_Area", "Tenants")'
+        }
+        else if (result == "Wrong Password") {
+            $("#Wrong").show();
+        }
+        else if (result == "User Not Found") {
+            $("#Wrong").show();
+        }
     }
+
 </script>

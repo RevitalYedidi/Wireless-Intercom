@@ -7,9 +7,37 @@ using System.Web.Mvc;
 
 namespace NEW.Controllers
 {
-    public class HomeController : Controller
+    public class BaseController : Controller
     {
+        public string IsApprove
+        {
+            get
+            {
+                var isApprove = Session["IsApprove"];
+                return isApprove == null ? "" : isApprove.ToString();
+            }
+            set
+            {
+                Session["IsApprove"] = value;
+            }
+        }
+        public string LoginSession
+        {
+            get
+            {
+                var login = Session["Login"];
+                return login == null ? "" : login.ToString();
+            }
+            set
+            {
+                Session["Login"] = value;
+            }
+        }
 
+    }
+
+    public class HomeController : BaseController
+    {
         private ApplicationDbContext _context;
         public ActionResult Index()
         {
@@ -48,13 +76,30 @@ namespace NEW.Controllers
 
         public ActionResult Message(int msgId)
         {
-            using(ApplicationDbContext context = new ApplicationDbContext())
+            if (LoginSession != "")
             {
-                var Message = context.Notifications.FirstOrDefault(m => m.id == msgId);
-                ViewBag.Message = Message.GuestMessage;
-            };
-           // ViewBag.Image = imageGuest;
-            return View();
+                IsApprove = "false";
+                using(ApplicationDbContext context = new ApplicationDbContext())
+                {
+                    var Message = context.Notifications.FirstOrDefault(m => m.id == msgId);
+                    ViewBag.Message = Message.GuestMessage;
+                };
+                Session["MsgID"] = msgId;
+               // ViewBag.Image = imageGuest;
+                return View();
+            }
+            return RedirectToAction("Login", "Home");
+        }
+        public JsonResult DeclineAnswer()
+        {
+            IsApprove = "false";
+
+            return Json("Declined!");
+        }
+        public JsonResult AcceptAnswer()
+        {
+            IsApprove = "True";
+            return Json("True");
         }
 
         public ActionResult Entrance()
@@ -62,26 +107,74 @@ namespace NEW.Controllers
             return View();
         }
 
+        public ActionResult GetSessionForLayout()
+        {
+            return Content(LoginSession);
+        }
+        public ActionResult GetUserName()
+        {
+            using (ApplicationDbContext context = new ApplicationDbContext())
+            {
+                var User = context.Tenants.FirstOrDefault(t => t.UserEmail == LoginSession);
+                return Content(User.FirstName.ToString());
+            };
+        }
 
-        
+
 
         public ActionResult Login()
         {
-            return View();
+            using(ApplicationDbContext context = new ApplicationDbContext())
+            {
+                var Users = context.Tenants.ToList();
+                return View();
+            }
+            
         }
-        
+        public JsonResult CheckLogin(string Email, string Password)
+        {
+            using (ApplicationDbContext context = new ApplicationDbContext())
+            {
+                var User = context.Tenants.FirstOrDefault(t => t.UserEmail == Email);
+
+                if (User != null)
+                {
+                    if (Password == User.UserPassword.ToString())
+                    {
+                        Session["Login"] = User.UserEmail.ToString();
+                        return Json("LogIn");
+                    }
+                    else
+                        return Json("Wrong Password");
+                }
+                else
+                {
+                    return Json("User Not Found");
+                }
+            }
+        }
+        public ActionResult LogOut()
+        {
+            Session["Login"] = "";
+            return Redirect("Login");
+        }
+
         /// <summary>
         ///יקבל מזהה של בניין וכך יזהה את הקוד ואת כל מה שצריך
         /// </summary>
         /// <returns></returns>
         public ActionResult Admin()
         {
-            using (ApplicationDbContext context = new ApplicationDbContext())
+            if (LoginSession != ""  )
             {
-                var building = context.Buildings.FirstOrDefault(b => b.Id == 1);
+                using (ApplicationDbContext context = new ApplicationDbContext())
+                {
+                    var building = context.Buildings.FirstOrDefault(b => b.Id == 1);
 
-                return View(building);
-            };
+                    return View(building);
+                };
+            }
+            return RedirectToAction("Login", "Home");
         }
 
         public JsonResult ChangeCode(string BuildingID)

@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace NEW.Controllers
 {
-    public class TenantsController : Controller
+    public class TenantsController : BaseController
     {
 
         private ApplicationDbContext _context;
@@ -15,20 +15,35 @@ namespace NEW.Controllers
         public TenantsController()
         {
             _context = new ApplicationDbContext();
-          
         }
         public ActionResult Tenant_Area()
         {
-            return View();
+            if (LoginSession != "")
+            {
+                var Tenant = _context.Tenants.FirstOrDefault(i => i.UserEmail == LoginSession.ToString());
+                ViewBag.userMail = LoginSession;
+                ViewBag.IsAdmin = Tenant.Admin.ToString();
+                ViewBag.FirstName = Tenant.FirstName.ToString();
+                return View();
+            }
+
+            //routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+
+            return  RedirectToAction("Login", "Home");
+
         }
 
 
         public ActionResult Tenants_List()
         {
-           
-            var Tenants = _context.Tenants.Where(i => i.BuildingId == 1).ToList();
-            //var TenantsFromBuikding = 
-            return View(Tenants);
+            if (LoginSession != "")
+            {
+                IsApprove = "false";
+                var Tenants = _context.Tenants.Where(i => i.BuildingId == 1).ToList();
+                //var TenantsFromBuikding = 
+                return View(Tenants);
+            }
+            return RedirectToAction("Login", "Home");
         }
 
         [HttpPost]

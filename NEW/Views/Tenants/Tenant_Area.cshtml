@@ -1,13 +1,8 @@
 ﻿
 @{
     ViewBag.Title = "Tenant_Area";
-    ViewBag.userMail = "revi@gmail.com";
 }
 
-@{ 
-    var username = "Tenant Name";
-    var admin = true;
-}
     <link href="~/Scripts/Modal.css" rel="stylesheet" />
 <style>
     .btn {
@@ -29,12 +24,11 @@
     }
 </style>
 
- @{ if (ViewBag.userMail == "revi@gmail.com")
-     {
+
      <div align="center">
 
          <br />
-         <h4>Hello @username,&emsp;what would you like to do?</h4>
+         <h4>Hello @ViewBag.FirstName, what would you like to do?</h4>
 
          <button type="button" class="btn btn-success btn-lg">Change detials</button>
          <div>
@@ -55,17 +49,16 @@
 
          </div>
 
-         @if (admin)
+         @if ( @ViewBag.IsAdmin == "True" )
          {
              <button type="button" class="btn btn-outline-danger" onclick="OnClickAdmin()">Admin area</button>
          }
 
      </div>
-     }
-     else
+    
+     @*else
      { <p> User Mail is invalid!</p>
-     }
-     }
+     }*@
 
 
 <script>

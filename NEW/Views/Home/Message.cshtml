@@ -3,6 +3,8 @@
     ViewBag.Title = "Message";
 }
 
+
+
 <style>
     #msg {
         width: 70%;
@@ -26,6 +28,8 @@
     }
 </style>
 <div id="resultsview">
+
+    <p>@HttpContext.Current.Session["MsgID"].ToString();</p>
     <div align="center">
 
         <div id="msg" class="card mb-3">
@@ -49,11 +53,38 @@
             @* buttons *@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item" align="center">
-                    <button type="button" class="btn btn-success">Accept</button>
+                    <button type="button" class="btn btn-success" onclick="AcceptAnswer()">Accept</button>
                     <span style="width:30px;"> &emsp;&emsp;&emsp;&emsp; </span>
-                    <button type="button" class="btn btn-danger">Decline</button>
+                    <button type="button" class="btn btn-danger" onclick="DeclineAnswer()">Decline</button>
                 </li>
             </ul>
         </div>
     </div>
 </div>
+
+<script>
+    function DeclineAnswer()
+    {
+        $.ajax(
+            {
+                type: 'POST',
+                url: '@Url.Action("DeclineAnswer","Home")',
+                success: function (result) {
+                    MessageId = result;
+                }
+            }
+        );
+    }
+    function AcceptAnswer()
+    {
+        $.ajax(
+            {
+                type: 'POST',
+                url: '@Url.Action("AcceptAnswer","Home")',
+                success: function (result) {
+                    MessageId = result;
+                }
+            }
+        );
+    }
+</script>

@@ -3,7 +3,6 @@
 @{
     ViewBag.Title = "Tenants_List";
 }
-
 <div id="divContent">
     <h1 style="margin-top:3%;">Adress of the building</h1>
     <h2>Tenants:</h2>
@@ -105,8 +104,21 @@
 
 </div>
 
+<div id="myModal" class="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Hello!</h2>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <p>Waiting For Response from the Tenant ......</p>
+            </div>
+        </div>
+        </div>
+    </div>
 
-<script>
+
+    <script>
 
     //void function select_SelectedIndexChanged(object sender, EventArgs e,)
     //{
@@ -114,9 +126,8 @@
     //}
 
     var tenantId;
-
     function onChangeSelected(id) {
-        
+
             var selected = "" + id;
             var e = document.getElementById(id);
             tenantId = e.options[e.selectedIndex].id;
@@ -176,21 +187,18 @@
                     }
                 });
             }
-
-            notification.onclick = GoToMsgView(event);
+            $("#myModal").show();
+            var waitingModal = document.getElementById("myModal");
+            setTimeout(function () { waitingModal.style.display = "none"; }, 5000);
 
             setTimeout(notification.close.bind(notification), 10000);
-            notification.onclick = GoToMsgView(event);
+            notification.onclick = function(){window.open('@Url.Action("Message", "Home")' + "?msgId=" + MessageId);};
 
-            // Finally, if the user has denied notifications and you 
+            // Finally, if the user has denied notifications and you
             // want to be respectful there is no need to bother them any more.
         }
     }
 
-    function GoToMsgView(event) {
-        event.preventDefault();
-        window.open('@Url.Action("Message", "Home")' + "?msgId=" + MessageId);
-    }
-</script>
+    </script>
 
 
