@@ -42,7 +42,7 @@
                 <div class="card border-primary mb-3" style="max-width: 25rem;" align="center">
                     <div class="card-body">
                         <h5 class="card-text">@ViewBag.Message</h5>
-                        <h6 class="card-subtitle text-muted">TIME HERE</h6>
+                        <h6 class="card-subtitle text-muted">@ViewBag.time</h6>
                     </div>
                 </div>
                 <div id="img" align="center">
@@ -74,6 +74,15 @@
                 }
             }
         );
+        $.ajax(
+            {
+                type: 'POST',
+                url: '@Url.Action("LogOut", "Home")',
+                success: function (result) {
+                }
+            }
+        );
+        window.close();
     }
     function AcceptAnswer()
     {
@@ -83,6 +92,15 @@
                 url: '@Url.Action("AcceptAnswer","Home")',
                 success: function (result) {
                     MessageId = result;
+                }
+            }
+        );
+        window.close();
+        $.ajax(
+            {
+                type: 'POST',
+                url: '@Url.Action("LogOut", "Home")',
+                success: function (result) {
                 }
             }
         );

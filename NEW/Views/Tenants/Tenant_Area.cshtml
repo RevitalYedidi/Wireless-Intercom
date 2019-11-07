@@ -61,7 +61,7 @@
     }*@
 
     @* popup msg *@
-    <div class="modal" id="ChangeDetails">
+    <div class="modal" id="ChangeDetails" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 @*title*@
@@ -72,7 +72,7 @@
                     </button>
                 </div>
                 @*body of popup*@
-                <div class="modal-body">
+                <div class="modal-body" style="overflow-y: auto;height: 480px;">
                     <div class="form-group">
                         @*@Html.LabelFor(t => t.Id)
         @Html.TextBoxFor(t => t.Id, new {  id = "idTenant", @readonly = "readonly", @style = "width: 60px;" })*@
@@ -121,7 +121,8 @@
                     </div>
         </div>
     </div>
-
+        </div>
+    
 
 <script>
     function hideModal() {

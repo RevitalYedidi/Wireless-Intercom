@@ -7,21 +7,6 @@
     <h1 style="margin-top:3%;">Adress of the building</h1>
     <h2>Tenants:</h2>
 
-
-    @*@{
-
-            List<string> _list = new List<string> { "noamaaaaaaaaa", "hila", "ido", "moriya" };
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                dropdownnn
-            </a>
-            <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-
-                @Html.DropDownListFor(item => _list, new SelectList(_list))
-            </div>
-            //new SelectListItem(new List<int>{ 1, 2, 3 },)
-
-        }*@
-
     @*<button type="button" class="btn btn-primary" data-target="#sendmsg" data-toggle="modal">Send Message To Tenant</button>*@
     <button type="button" style="float: right;" class="btn btn-danger" onclick="history.go(-1);">Back</button>
     <br />
@@ -64,7 +49,7 @@
     }
     <fieldset>
         <table class="table table-hover">
-            @*מספר הדירות מהדאטה בייס*@
+            @*count of apartments from DB*@
             @{
                 var apartmentNum = Model.GroupBy(t => t.ApartmentNumber).Count();
             }
@@ -116,6 +101,18 @@
         </div>
         </div>
     </div>
+<div id="IsApproveModal" class="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Hello!</h2>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <p id="TextForTenant"></p>
+            </div>
+        </div>
+    </div>
+</div>
 
 
     <script>
@@ -143,16 +140,17 @@
         $("#sendmsg").hide();
     }
     var MessageId;
+        var interval = null;
+        function notifyMe() {
 
-    function notifyMe() {
-        var textMsg = $('#exampleTextarea')[0].value;
+            var textMsg = $('#exampleTextarea')[0].value;
 
-        var data = {
+            var data = {
 
-            msg: textMsg,
-            tenantId: tenantId,
-            imgGuest: "image"
-        };
+                msg: textMsg,
+                tenantId: tenantId,
+                imgGuest: "image"
+            };
 
         $.ajax(
             {
@@ -189,16 +187,92 @@
             }
             $("#myModal").show();
             var waitingModal = document.getElementById("myModal");
-            setTimeout(function () { waitingModal.style.display = "none"; }, 5000);
+            //setTimeout(function () { waitingModal.style.display = "none"; }, 5000);
 
             setTimeout(notification.close.bind(notification), 10000);
-            notification.onclick = function(){window.open('@Url.Action("Message", "Home")' + "?msgId=" + MessageId);};
-
+            notification.onclick = function () {
+                window.open('@Url.Action("Message", "Home")' + "?msgId=" + MessageId);
+                interval = setInterval(CheckAnswer, 1000);
+                setTimeout(function () {
+                    clearInterval(interval); console.log("Decline");
+                    $("#myModal").hide();
+                    $("#TextForTenant").text("No Response From The Tenant.");
+                    $("#IsApproveModal").show();
+                    var modal = document.getElementById("IsApproveModal");
+                    setTimeout(function () { modal.style.display = "none"; }, 5000);
+                    setTimeout(function () {
+                    location.href = "@Url.Action("Entrance", "Home")";
+                }, 10000);
+                }, 40000);
+                
+            };
             // Finally, if the user has denied notifications and you
             // want to be respectful there is no need to bother them any more.
+            }
+            
+            var modal = document.getElementById("IsApproveModal");
+            setTimeout(function () { modal.style.display = "none"; }, 5000);
+            setTimeout(function () {
+                clearInterval(interval); console.log("no respose");
+                $("#myModal").hide();
+                $("#TextForTenant").text("No Response From The Tenant.");
+                $("#IsApproveModal").show();
+                setTimeout(function () {
+                    location.href = "@Url.Action("Entrance", "Home")";
+                }, 10000);
+            }, 40000);
         }
-    }
+        var isapprove = "";
+        function CheckAnswer(){
+                 $.ajax(
+                {
+                         type: 'POST',
+                         async: false,
+                    url: '@Url.Action("CheckSessionApprove", "Tenants")',
+                    success: function (result) {
+                        isapprove = result;
+                        console.log(isapprove);
+                    }
+                });
 
+            if (isapprove != "") {
+                clearInterval(interval);
+                if (isapprove == "false") {
+                    $("#myModal").hide();
+                    $("#TextForTenant").text("The Tenant Declined Your Request! ");
+                    $("#IsApproveModal").show();
+                   
+                    
+                }
+                else {
+                    $("#myModal").hide();
+                    $("#TextForTenant").text("The Door Is Open!");
+                    $("#IsApproveModal").show();
+                    var data = {
+                        msg: $('#exampleTextarea')[0].value,
+                        buildingId:1,
+                        TenantId: tenantId
+                    }
+                    $.ajax(
+                        {
+                            type: 'POST',
+                            data: data,
+                            url: '@Url.Action("SaveEntry", "Tenants")',
+                            success: function (result) {
+                                console.log(result)
+                            }
+                        });
+                }
+                var modal = document.getElementById("IsApproveModal");
+                setTimeout(function () {
+                    modal.style.display = "none";
+                }, 5000);
+                setTimeout(function () {
+                    location.href = "@Url.Action("Entrance", "Home")";
+                }, 10000);
+                
+            }
+        }
     </script>
 
 

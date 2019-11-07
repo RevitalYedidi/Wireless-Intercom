@@ -78,28 +78,33 @@ namespace NEW.Controllers
         {
             if (LoginSession != "")
             {
-                IsApprove = "false";
+                IsApprove = "";
                 using(ApplicationDbContext context = new ApplicationDbContext())
                 {
                     var Message = context.Notifications.FirstOrDefault(m => m.id == msgId);
                     ViewBag.Message = Message.GuestMessage;
                 };
+                ViewBag.time = DateTime.Now.ToString("HH:mm");
                 Session["MsgID"] = msgId;
+                
                // ViewBag.Image = imageGuest;
                 return View();
             }
             return RedirectToAction("Login", "Home");
         }
+
         public JsonResult DeclineAnswer()
         {
             IsApprove = "false";
 
-            return Json("Declined!");
+            return Json(IsApprove);
         }
+
         public JsonResult AcceptAnswer()
         {
-            IsApprove = "True";
-            return Json("True");
+
+            IsApprove = "true";
+            return Json(IsApprove);
         }
 
         public ActionResult Entrance()
@@ -158,7 +163,11 @@ namespace NEW.Controllers
             Session["Login"] = "";
             return Redirect("Login");
         }
-
+        public JsonResult CloseSession()
+        {
+            Session["Login"] = "";
+            return Json("true");
+        }
         /// <summary>
         ///יקבל מזהה של בניין וכך יזהה את הקוד ואת כל מה שצריך
         /// </summary>

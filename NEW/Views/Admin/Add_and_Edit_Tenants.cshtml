@@ -1,0 +1,324 @@
+﻿@model IEnumerable<NEW.Models.Tenant>
+
+@{
+    ViewBag.Title = "Add_or_Edit_Tenants";
+    ViewBag.TenantId = 1;
+}
+
+
+<style>
+
+    tr {
+        text-align: center;
+    }
+
+    td {
+        text-align: center;
+    }
+
+    table {
+        align-self: center;
+    }
+
+    .pic {
+        background: none;
+        border: 0;
+    }
+</style>
+
+@if (ViewBag.IsAdmin)
+{
+
+    <div id="divContent">
+
+        <br />
+        <div style="text-align:left; margin:0px auto 0px auto;">
+            <h3>Add or Edit Tenants</h3>
+        </div>
+
+        <div style="text-align:right; margin:0px auto 0px auto; margin-top:-4%;">
+            @*add button
+                ADD TOOLTIP
+            *@
+            <button class="pic" data-toggle="tooltip" data-placement="top" title="Add" data-original-title="Add" aria-describedby="tooltip186991" onclick="ChangeDetailsClick('')">
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                     width="64" height="64"
+                     viewBox="0 0 128 128"
+                     style=" fill:#000000;"><path fill="#fff" d="M64 16A48 48 0 1 0 64 112A48 48 0 1 0 64 16Z"></path><path fill="#6fccdd" d="M64 25A39 39 0 1 0 64 103A39 39 0 1 0 64 25Z"></path><path fill="none" stroke="#444b54" stroke-miterlimit="10" stroke-width="6" d="M64 16A48 48 0 1 0 64 112A48 48 0 1 0 64 16Z"></path><path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="6" d="M64 42L64 86M42 64L86 64"></path></svg>
+            </button>
+
+            @*back button*@
+            <button type="button" style="margin-left:1%;" class="btn btn-danger" onclick="history.go(-1);">Back</button>
+        </div>
+
+        <br />
+
+        <fieldset>
+
+            <table id="table" class="table table-hover">
+                @*count of Tenants from DB*@
+                @{
+                    var tenantsNum = Model.Where(a => a.BuildingId == 1).Count();
+                    var entrances = Model.Where(a => a.BuildingId == 1).OrderBy(a => a.ApartmentNumber).ToList();
+
+                    var apartmentNum = Model.GroupBy(t => t.ApartmentNumber).Count();
+
+                }
+
+                <tr>
+                    <th> Apartment Number </th>
+                    <th> Last Name </th>
+                    <th>
+                        <span style="margin-left:-15%; text-align:left;">Tenants</span>
+                        <span style="padding:20%;min-width:100px"> </span>
+                        Mail
+                    </th>
+
+
+                </tr>
+
+                @for (int j = 1; j <= apartmentNum; j++)
+                {
+                    var tenant = Model.Where(a => a.ApartmentNumber == j).ToList()[0];
+                    {
+
+                        <tr>
+                            <td width="20%" style="font-size:larger"> @tenant.ApartmentNumber </td>
+                            <td width="20%"> @tenant.LastName </td>
+
+
+
+
+                            <td width="60%">
+                                @{
+                                    var apartmentList = Model.Where(t => t.ApartmentNumber == tenant.ApartmentNumber).ToList();
+                                    var count = apartmentList.Count();
+
+                                }
+
+                                @for (int i = 0; i < count; i++)
+                                {
+                                    <table align="center">
+                                        <tr>
+                                            <td width="50%">
+                                                @apartmentList[i].FirstName
+                                            </td>
+                                            <td></td>
+                                            <td width="60%">
+                                                @apartmentList[i].UserEmail
+                                            </td>
+                                            <td>
+                                                @*pencil button*@
+                                                <button id="@apartmentList[i].Id" class="pic" title="Edit @apartmentList[i].FirstName" data-firstname="@apartmentList[i].FirstName" data-lastname="@apartmentList[i].LastName" data-apartmentnum="@apartmentList[i].ApartmentNumber" data-useremail="@apartmentList[i].UserEmail" onclick="ChangeDetailsClick(this.id)">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                                                         width="40" height="40"
+                                                         viewBox="0 0 172 172"
+                                                         style=" fill:#000000;"><g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path d="M0,172v-172h172v172z" fill="none"></path><path d="M0,86c0,-47.49649 38.50351,-86 86,-86c47.49649,0 86,38.50351 86,86c0,47.49649 -38.50351,86 -86,86c-47.49649,0 -86,-38.50351 -86,-86zM86,168.56c45.59663,0 82.56,-36.96337 82.56,-82.56c0,-45.59663 -36.96337,-82.56 -82.56,-82.56c-45.59663,0 -82.56,36.96337 -82.56,82.56c0,45.59663 36.96337,82.56 82.56,82.56z" fill="#ffffff"></path><g><path d="M45.72887,111.75201l7.99606,-7.99607l15.55792,13.55003l-8.9695,8.96808l-25.46679,10.87664z" fill="#f5ce85"></path><path d="M53.75899,104.72654l14.48373,12.61491l-8.33521,8.33521l-23.71149,10.12598l10.13024,-23.6448l7.43272,-7.4313M53.6923,102.78677l-8.56225,8.56225l-11.63296,27.14973l27.22068,-11.62587l9.60379,-9.60379l-16.62926,-14.48231z" fill="#967a44"></path><path d="M40.0997,123.1182l-6.59409,15.38906l15.42879,-6.58984z" fill="#36404d"></path><path d="M113.30307,44.1395l6.9233,-6.9233c1.94403,-1.94403 4.52803,-3.01396 7.27663,-3.01396c2.7486,0 5.3326,1.06993 7.27663,3.01396c1.94403,1.94403 3.01396,4.52661 3.01396,7.27663c0,2.75002 -1.06993,5.3326 -3.01396,7.27663l-6.9233,6.9233z" fill="#f78f8f"></path><path d="M127.503,34.91174c2.55988,0 4.96508,0.99614 6.77431,2.80678c1.81064,1.80923 2.80678,4.21443 2.80678,6.77431c0,2.55988 -0.99614,4.96508 -2.80678,6.77431l-6.42097,6.42097l-13.55003,-13.54861l6.42098,-6.42239c1.81064,-1.80923 4.21585,-2.80536 6.77572,-2.80536M127.503,33.49274c-2.8153,0 -5.63059,1.07418 -7.77754,3.22113l-7.42563,7.42563l15.5565,15.5565l7.42563,-7.42563c4.29531,-4.29531 4.29531,-11.26118 0,-15.5565v0c-2.14837,-2.14695 -4.96366,-3.22113 -7.77896,-3.22113z" fill="#c74343"></path><g><path d="M61.36483,125.22258c-0.12913,-0.69531 -0.41577,-1.49563 -1.01317,-2.19661c-0.86417,-1.01317 -2.1583,-1.5836 -3.854,-1.70138c-0.33488,-3.93773 -3.5404,-5.37801 -5.71006,-5.6689c-0.254,-3.0622 -2.29736,-4.39606 -4.12503,-4.83737l63.28456,-63.32146l14.55326,14.55326z" fill="#bae0bd"></path><path d="M109.94714,48.50009l13.55003,13.55003l-61.79461,61.83009c-0.19015,-0.44415 -0.45266,-0.89255 -0.81167,-1.31399c-0.88687,-1.04013 -2.14695,-1.67442 -3.75609,-1.89011c-0.57044,-3.6369 -3.45668,-5.17226 -5.70296,-5.63059c-0.37745,-2.48467 -1.86599,-3.85684 -3.45385,-4.53938l61.96915,-62.00604M109.94714,46.4922l-64.81708,64.85681c0,0 0.02128,-0.00142 0.06102,-0.00142c0.56476,0 4.914,0.15609 4.914,4.9594c0,0 5.71147,0.17738 5.71147,5.70296c5.68026,0 4.90123,4.86291 4.90123,4.86291l64.78445,-64.82418l-15.55508,-15.5565z" fill="#5e9c76"></path></g><g><path d="M107.51814,49.92846l10.94874,-10.94912l14.55334,14.55284l-10.94874,10.94912z" fill="#d9e7f5"></path><path d="M118.46681,39.97899l13.55003,13.55003l-9.94577,9.94435l-13.55003,-13.55003l9.94577,-9.94435M118.46681,37.97253l-11.95224,11.95224l15.5565,15.5565l11.95224,-11.95224l-15.5565,-15.5565z" fill="#788b9c"></path></g></g><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,144.48c-32.29761,0 -58.48,-26.18239 -58.48,-58.48v0c0,-32.29761 26.18239,-58.48 58.48,-58.48v0c32.29761,0 58.48,26.18239 58.48,58.48v0c0,32.29761 -26.18239,58.48 -58.48,58.48z" fill="none"></path><path d="M86,141.04c-30.39775,0 -55.04,-24.64225 -55.04,-55.04v0c0,-30.39775 24.64225,-55.04 55.04,-55.04v0c30.39775,0 55.04,24.64225 55.04,55.04v0c0,30.39775 -24.64225,55.04 -55.04,55.04z" fill="none"></path><path d="M86,145.34c-32.77258,0 -59.34,-26.56742 -59.34,-59.34v0c0,-32.77258 26.56742,-59.34 59.34,-59.34v0c32.77258,0 59.34,26.56742 59.34,59.34v0c0,32.77258 -26.56742,59.34 -59.34,59.34z" fill="none"></path><path d="M86,141.9c-30.87272,0 -55.9,-25.02728 -55.9,-55.9v0c0,-30.87272 25.02728,-55.9 55.9,-55.9v0c30.87272,0 55.9,25.02728 55.9,55.9v0c0,30.87272 -25.02728,55.9 -55.9,55.9z" fill="none"></path><path d="M86,165.12c-43.69677,0 -79.12,-35.42323 -79.12,-79.12v0c0,-43.69677 35.42323,-79.12 79.12,-79.12v0c43.69677,0 79.12,35.42323 79.12,79.12v0c0,43.69677 -35.42323,79.12 -79.12,79.12z" fill="none"></path><path d="M86,161.68c-41.79691,0 -75.68,-33.88309 -75.68,-75.68v0c0,-41.79691 33.88309,-75.68 75.68,-75.68v0c41.79691,0 75.68,33.88309 75.68,75.68v0c0,41.79691 -33.88309,75.68 -75.68,75.68z" fill="none"></path><path d="M86,172c-47.49649,0 -86,-38.50351 -86,-86v0c0,-47.49649 38.50351,-86 86,-86v0c47.49649,0 86,38.50351 86,86v0c0,47.49649 -38.50351,86 -86,86z" fill="none"></path><path d="M86,168.56c-45.59663,0 -82.56,-36.96337 -82.56,-82.56v0c0,-45.59663 36.96337,-82.56 82.56,-82.56v0c45.59663,0 82.56,36.96337 82.56,82.56v0c0,45.59663 -36.96337,82.56 -82.56,82.56z" fill="none"></path><path d="M86,172c-47.49649,0 -86,-38.50351 -86,-86v0c0,-47.49649 38.50351,-86 86,-86v0c47.49649,0 86,38.50351 86,86v0c0,47.49649 -38.50351,86 -86,86z" fill="none"></path><path d="M86,168.56c-45.59663,0 -82.56,-36.96337 -82.56,-82.56v0c0,-45.59663 36.96337,-82.56 82.56,-82.56v0c45.59663,0 82.56,36.96337 82.56,82.56v0c0,45.59663 -36.96337,82.56 -82.56,82.56z" fill="none"></path><path d="M86,172c-47.49649,0 -86,-38.50351 -86,-86v0c0,-47.49649 38.50351,-86 86,-86v0c47.49649,0 86,38.50351 86,86v0c0,47.49649 -38.50351,86 -86,86z" fill="none"></path><path d="M86,168.56c-45.59663,0 -82.56,-36.96337 -82.56,-82.56v0c0,-45.59663 36.96337,-82.56 82.56,-82.56v0c45.59663,0 82.56,36.96337 82.56,82.56v0c0,45.59663 -36.96337,82.56 -82.56,82.56z" fill="none"></path><path d="M86,172c-47.49649,0 -86,-38.50351 -86,-86v0c0,-47.49649 38.50351,-86 86,-86v0c47.49649,0 86,38.50351 86,86v0c0,47.49649 -38.50351,86 -86,86z" fill="none"></path><path d="M86,168.56c-45.59663,0 -82.56,-36.96337 -82.56,-82.56v0c0,-45.59663 36.96337,-82.56 82.56,-82.56v0c45.59663,0 82.56,36.96337 82.56,82.56v0c0,45.59663 -36.96337,82.56 -82.56,82.56z" fill="none"></path><path d="M86,172c-47.49649,0 -86,-38.50351 -86,-86v0c0,-47.49649 38.50351,-86 86,-86v0c47.49649,0 86,38.50351 86,86v0c0,47.49649 -38.50351,86 -86,86z" fill="none"></path><path d="M86,168.56c-45.59663,0 -82.56,-36.96337 -82.56,-82.56v0c0,-45.59663 36.96337,-82.56 82.56,-82.56v0c45.59663,0 82.56,36.96337 82.56,82.56v0c0,45.59663 -36.96337,82.56 -82.56,82.56z" fill="none"></path><path d="M86,172c-47.49649,0 -86,-38.50351 -86,-86v0c0,-47.49649 38.50351,-86 86,-86v0c47.49649,0 86,38.50351 86,86v0c0,47.49649 -38.50351,86 -86,86z" fill="none"></path><path d="M86,168.56c-45.59663,0 -82.56,-36.96337 -82.56,-82.56v0c0,-45.59663 36.96337,-82.56 82.56,-82.56v0c45.59663,0 82.56,36.96337 82.56,82.56v0c0,45.59663 -36.96337,82.56 -82.56,82.56z" fill="none"></path><path d="M86,172c-47.49649,0 -86,-38.50351 -86,-86v0c0,-47.49649 38.50351,-86 86,-86v0c47.49649,0 86,38.50351 86,86v0c0,47.49649 -38.50351,86 -86,86z" fill="none"></path><path d="M86,168.56c-45.59663,0 -82.56,-36.96337 -82.56,-82.56v0c0,-45.59663 36.96337,-82.56 82.56,-82.56v0c45.59663,0 82.56,36.96337 82.56,82.56v0c0,45.59663 -36.96337,82.56 -82.56,82.56z" fill="none"></path></g></svg>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                }
+
+                            </td>
+
+                        </tr>
+                                        }
+                                    }
+            </table>
+
+        </fieldset>
+
+    </div>
+
+    @* popup change *@
+    <div class="modal" id="ChangeDetails">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @*title*@
+                <div class="modal-header">
+                    <h5 id="massegeToTenant" class="modal-title">Change tenant's details:</h5>
+                    <button onclick="hideModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        @*<span aria-hidden="true">&times;</span>*@
+                    </button>
+                </div>
+                @*body of popup*@
+                <div class="modal-body" style="overflow-y: auto;height: 480px;">
+                    <div class="form-group">
+                        @*@Html.LabelFor(t => t.Id)
+        @Html.TextBoxFor(t => t.Id, new {  id = "idTenant", @readonly = "readonly", @style = "width: 60px;" })*@
+                        <div id="helper" name="help" value="2" runat="server"></div>
+                        <div class="col-md-10">
+                            @*@{
+                var FirstName = Model.Where(t => t.Id == ViewBag.TenantId).ToList()[0].FirstName;
+                var LastName = Model.Where(t => t.Id == ViewBag.TenantId).ToList()[0].LastName;
+            }*@
+
+                            @Html.Label("Apartment Number")
+                            <input id="ApartmentNum" type="text" class="form-control" value="" />
+                        </div>
+                        <br />
+                        <div class="col-md-10">
+                            @Html.Label("First Name")
+                            @*@Html.TextBoxFor(t => FirstName, new { @class = "form-control", id = "FirstName" })*@
+                            <input id="FirstName" type="text" class="form-control" value="" />
+                        </div>
+                        <br />
+                        <div class="col-md-10">
+                            @Html.Label("Last Name")
+                            @*@Html.TextBoxFor(t => LastName, new { @class = "form-control", id = "LastName" })*@
+                            <input id="LastName" type="text" class="form-control" value="" />
+                        </div>
+
+                        <br />
+                        @*<div class="col-md-10">
+            <button type="button" class="btn-sm" onclick="SaveDetailsClick()">Save Details</button>
+        </div>
+        <br />*@
+                        <div class="col-md-10">
+                            @Html.Label("User Email")
+                            <input id="UserEmail" type="email" class="form-control" value="" />
+                        </div>
+                        <label style="color:red;display:none;" id="DetailsErr" class="label-danger"> Fields Cannot Be Empty</label>
+
+                        <br />
+                        <div class="col-md-10">
+                            @Html.Label("User Password")
+                            <input id="UserPass" type="password" class="form-control" value="" />
+                        </div>
+                        <br />
+                        <label style="color:red;display:none;" id="passwordErr" class="label-danger">  Password Inputs Are Not Matches or Empty</label>
+                        @*Save button*@
+                        <div class="modal-footer"></div>
+                        <div style="text-align:center">
+                            <button type="button" class="btn btn-primary" style="width:25%;" onclick="SaveDetailsClick()">Save</button>
+                            @*cancel button*@
+                            <button onclick="hideModal()" type="button" class="btn btn-secondary" style="width:25%; margin-left:5%" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+else
+{
+    <br />
+    <h1> You Have No Admin Permissions! </h1>
+}
+
+@*TRYING TO DO TOOLTIP*@
+
+@*<script type="text/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>*@
+
+<script>
+    function hideModal() {
+        $("#ChangeDetails").hide();
+        $("#UserPass").val() = "";
+    }
+
+    var modal = document.getElementById("myModal");
+    var openDoorButton = document.getElementById("openDoor");
+    var tenantId = '';
+
+    //openDoorButton.onclick = function () {
+    //    modal.style.display = "block";
+    //    setTimeout(function () { modal.style.display = "none"; }, 5000);
+    //}
+
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+    }
+    function ChangeDetailsClick(id) {
+        tenantId = id;
+        if (tenantId != '') {
+            const button = document.getElementById(id);
+            var firstName = button.dataset.firstname;
+            var lastName = button.dataset.lastname;
+            var apartmentNum = button.dataset.apartmentnum;
+            var userEmail = button.dataset.useremail;
+            tenantId = id;
+
+            document.getElementById("FirstName").value = firstName;
+            document.getElementById("LastName").value = lastName;
+            document.getElementById("ApartmentNum").value = apartmentNum;
+            document.getElementById("UserEmail").value = userEmail;
+        }
+        
+        $("#ChangeDetails").show();
+    }
+
+    function SaveDetailsClick() {
+
+        $("#passwordErr").hide();
+        $("#DetailsErr").hide();
+        //$("#DetailsErr").show();
+        if ($("#FirstName").val() == "" || $("#LastName").val() == "" || $("#ApartmentNum").val() == "" || $("#UserEmail").val == "") {
+            $("#DetailsErr").show();
+        }
+        else if (tenantId != '') {
+            if ($("#UserPass").val() != "") {
+                var data = {
+                    Id: tenantId,
+                    FirstName: $("#FirstName").val(),
+                    LastName: $("#LastName").val(),
+                    ApartmentNum: $("#ApartmentNum").val(),
+                    UserEmail: $("#UserEmail").val(),
+                    UserPass: $("#UserPass").val()
+                };
+
+                $.ajax(
+                    {
+                        type: 'POST',
+                        data: data,
+                        url: '@Url.Action("SaveDetails","Admin")',
+                        success: function (result) {
+                            alert(result);
+                        }
+                    }
+                );
+            }
+            else {
+                $("#DetailsErr").show(); $("#passwordErr").show();
+            }
+        
+        }
+        else {
+            var data = {
+                FirstName: $("#FirstName").val(),
+                LastName: $("#LastName").val(),
+                ApartmentNum: $("#ApartmentNum").val(),
+                UserEmail: $("#UserEmail").val(),
+                UserPass: $("#UserPass").val()
+            };
+            $.ajax(
+                {
+                    type: 'POST',
+                    data: data,
+                    url: '@Url.Action("AddTenant","Admin")',
+                    success: function (result) {
+                        alert(result);
+                    }
+                }
+            );
+        }
+    }
+
+</script>

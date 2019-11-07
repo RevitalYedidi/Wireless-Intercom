@@ -1,0 +1,110 @@
+﻿@model IEnumerable<NEW.Models.Entrances>
+
+@{
+    ViewBag.Title = "List_of_Entrances";
+}
+
+<style>
+
+    a:link {
+        color: #fff;
+        text-decoration: none;
+    }
+
+    a:visited {
+        color: #fff;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #fff;
+        text-decoration: none;
+    }
+
+    a:active {
+        color: #fff;
+        text-decoration: none;
+    }
+</style>
+
+@if (ViewBag.IsAdmin)
+{
+
+    <div id="divContent">
+
+        <br />
+        <div style="text-align:left; margin:0px auto 0px auto;">
+            <h3>List of Entrances</h3>
+        </div>
+
+        <div style="text-align:right; margin:0px auto 0px auto; margin-top:-4%;">
+            <button type="button" class="btn btn-success">
+                <a id="downloadLink" onclick="exportF(this)">Export to excel</a>
+            </button>
+            @*back button*@
+            <button type="button" style="margin-left:1%;" class="btn btn-danger" onclick="history.go(-1);">Back</button>
+
+        </div>
+
+        <br />
+
+        <fieldset>
+
+            <table id="table" class="table table-hover">
+                @*count of Tenants from DB*@
+                @{
+                    var entrancesNum = Model.Where(a => a.BuildingId == 1).Count();
+                    var entrances = Model.Where(a => a.BuildingId == 1).OrderBy(a => a.Date).ToList();
+                    //entrances.OrderBy(a => a.Date);
+
+                }
+
+                <tr>
+                    <th> Date </th>
+                    <th> Time </th>
+                    <th> Tenant Id </th>
+                    <th> Message </th>
+                    <th> Image Url </th>
+                </tr>
+
+                @for (int j = 0; j < entrancesNum; j++)
+                {
+                    {
+                        <tr>
+                            <td> @entrances[j].Date </td>
+                            <td> @entrances[j].Time </td>
+                            <td> @entrances[j].TenantId </td>
+                            <td> @entrances[j].Message </td>
+                            <td> @entrances[j].ImageUrl </td>
+
+                            @*add if its open or not
+                                change tenant id to his name
+                            *@
+                        </tr>
+                    }
+                }
+            </table>
+
+        </fieldset>
+
+    </div>
+
+}
+
+else
+    {
+        <br />
+        <h1> You Have No Admin Permissions! </h1>
+    }
+
+<script>
+    function exportF(elem) {
+        alert("HI");
+        var table = document.getElementById("table");
+        var html = table.outerHTML;
+        var url = 'data:application/vnd.ms-excel,' + escape(html); // Set your html table into url
+        elem.setAttribute("href", url);
+        elem.setAttribute("download", "entrances_list.xls"); // Choose the file name
+        return false;
+    }
+</script>

@@ -9,7 +9,6 @@ namespace NEW.Controllers
 {
     public class TenantsController : BaseController
     {
-
         private ApplicationDbContext _context;
 
         public TenantsController()
@@ -37,11 +36,16 @@ namespace NEW.Controllers
 
         public ActionResult Tenants_List()
         {
-                IsApprove = "false";
-                var Tenants = _context.Tenants.Where(i => i.BuildingId == 1).ToList();
-                //var TenantsFromBuikding = 
-                return View(Tenants);
+            IsApprove = "";
+            var Tenants = _context.Tenants.Where(i => i.BuildingId == 1).ToList();
+            //var TenantsFromBuikding = 
+            ViewBag.approve = IsApprove;
+            return View(Tenants);
             
+        }
+        public JsonResult CheckSessionApprove()
+        {
+            return Json(IsApprove);
         }
         [HttpPost]
         public JsonResult SaveDetails(string FirstName, string LastName, string Id)
@@ -94,6 +98,32 @@ namespace NEW.Controllers
             }
 
         }
+        [HttpPost]
+        public JsonResult SaveEntry(string msg, int buildingId, int TenantId)
+        {
+            try
+            {
+                Entrances entry = new Entrances();
+                using (ApplicationDbContext context = new ApplicationDbContext())
+                {
+                    entry.Message = msg;
+                    entry.BuildingId = buildingId;
+                    entry.TenantId = TenantId;
+                    entry.Date = DateTime.Now.ToString("dd/MM/yyyy");
+                    entry.Time = DateTime.Now.ToString("HH:mm"); 
+
+                    context.Entrances.Add(entry);
+                    context.SaveChanges();
+
+                    return Json("Details Succesfuly Saved!");
+                };
+            }
+            catch (Exception e)
+            {
+                return Json("  There Was A Problem " + e.Message);
+            }
+        }
+
         [HttpPost]
         public JsonResult SaveNotify(int tenantId, string msg, string imgGuest)
         {
