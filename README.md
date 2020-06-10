@@ -3,6 +3,16 @@
 Wireless building intercom system by web application development, which will be an alternative to intercom systems installed on the doors of the building today and does not need a physical connection for every tenant.
 In addition, for existing buildings the way to install the app will be easily possible without any infrastructure changes and high financial cost.
 
+Backend: C# on ASP .NET and SQL
+Frontend: HTML, CSS , JavaScript, Bootstrap library
+
+
+System Installation Instructions:
+
+The app needs to be downloaded and installed on your computer / laptop.
+After installation, click the icon to start the system.
+
+
 The door will be opened by:
 
 - Direct opening through the main pedestal to be installed near the door, from the outside of the building, to occupants with access codes.
@@ -14,10 +24,6 @@ The door will be opened by:
 All door opener data, including time and date and door opener identification information, will be collected into a database to which only the administrator can access, which can export this data to a neat Excel table and draw conclusions and lessons.
 
 
-System Installation Instructions:
-
-The app needs to be downloaded and installed on your computer / laptop.
-After installation, click the icon to start the system.
 
 
 Instructions for system users:
