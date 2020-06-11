@@ -1,4 +1,4 @@
-# TheProject2019
+# Wireless-Intercom
 
 Wireless building intercom system by web application development, which will be an alternative to intercom systems installed on the doors of the building today and does not need a physical connection for every tenant.
 In addition, for existing buildings the way to install the app will be easily possible without any infrastructure changes and high financial cost.
